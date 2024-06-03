@@ -9,4 +9,5 @@ public class Product
     [Required] public double Price { get; set; }
     [Required] public DateTime DateAdded { get; set; }
     [Required] public bool isActive { get; set; }
+    public Uri ImageUrl { get; set; }
 }
