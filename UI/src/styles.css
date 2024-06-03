@@ -1,3 +1,52 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  backdrop-filter: blur(2px);
+  background-image: url("/assets/images/cypher-bg.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  min-height: 100vh;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  blockquote,
+  label {
+    @apply text-white;
+  }
+}
+
+@layer components {
+  .outer-container {
+    @apply rounded-xl border border-white/50 p-2;
+  }
+
+  .container {
+    @apply h-full w-full rounded-lg bg-midnight-blue px-10 py-6;
+  }
+
+  .form-field {
+    @apply flex flex-col gap-2;
+  }
+
+  .input {
+    @apply bg-steel-blue rounded-lg px-3 py-1 text-lg text-white focus:outline-white;
+  }
+
+  .btn {
+    @apply cursor-pointer rounded-lg px-4 py-2 text-center text-lg;
+  }
+
+  .primary-btn {
+    @apply bg-royal-blue hover:bg-royal-blue-hover font-bold text-white transition-all duration-200;
+  }
+}
