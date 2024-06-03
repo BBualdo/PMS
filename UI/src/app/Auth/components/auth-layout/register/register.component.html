@@ -1,0 +1,29 @@
+<form class="flex flex-col gap-10">
+  <div class="flex flex-col gap-6">
+    <div class="form-field">
+      <label for="firstName">First name</label>
+      <input id="firstName" type="text" class="input w-full" />
+    </div>
+    <div class="form-field">
+      <label for="lastName">Last name</label>
+      <input id="lastName" type="text" class="input w-full" />
+    </div>
+    <div class="form-field">
+      <label for="email">Email</label>
+      <input id="email" type="email" class="input w-full" />
+    </div>
+    <div class="form-field">
+      <label for="password">Password</label>
+      <input id="password" type="password" class="input w-full" />
+    </div>
+    <div class="form-field">
+      <label for="confirmPassword">Confirm Password</label>
+      <input id="confirmPassword" type="password" class="input w-full" />
+    </div>
+  </div>
+  <button class="btn primary-btn">Create account</button>
+  <div class="flex flex-col gap-4 border-t border-white/50">
+    <p class="mt-2 text-center">Already have an account?</p>
+    <a routerLink="../login" class="btn primary-btn text-center">Sign in</a>
+  </div>
+</form>
