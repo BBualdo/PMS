@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace Data.Models;
 
 public class User : IdentityUser
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
+    [Required] [StringLength(50)] public string FirstName { get; set; }
+    [Required] [StringLength(50)] public string LastName { get; set; }
 }

@@ -12,5 +12,11 @@ public class PmsDbContext(DbContextOptions options) : IdentityDbContext<User>(op
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<User>()
+            .Property(u => u.FirstName);
+
+        builder.Entity<User>()
+            .Property(u => u.LastName);
     }
 }
