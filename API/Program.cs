@@ -28,7 +28,11 @@ void ConfigureServices()
     builder.Services.AddDbContext<PmsDbContext>(options =>
         options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
-    builder.Services.AddIdentityCore<User>()
+    builder.Services.AddIdentityCore<User>(options =>
+        {
+            options.SignIn.RequireConfirmedEmail = true;
+            options.User.RequireUniqueEmail = true;
+        })
         .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<PmsDbContext>();
 
