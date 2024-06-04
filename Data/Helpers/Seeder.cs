@@ -19,6 +19,8 @@ public class Seeder(UserManager<User> userManager, RoleManager<IdentityRole> rol
     public async Task CreateAdminAsync()
     {
         const string email = "admin@admin.com";
+        const string password = "Admin123!";
+
         if (await _userManager.FindByEmailAsync(email) == null)
         {
             var admin = new User
@@ -27,11 +29,10 @@ public class Seeder(UserManager<User> userManager, RoleManager<IdentityRole> rol
                 LastName = "Admin",
                 Email = email,
                 UserName = email,
-                PasswordHash = "Admin123!",
                 EmailConfirmed = true
             };
 
-            await _userManager.CreateAsync(admin);
+            await _userManager.CreateAsync(admin, password);
 
             await _userManager.AddToRoleAsync(admin, "Admin");
         }
