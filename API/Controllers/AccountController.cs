@@ -23,6 +23,8 @@ public class AccountController(SignInManager<User> signInManager, UserManager<Us
             PasswordHash = model.Password
         };
 
+        await _userManager.AddToRoleAsync(user, "Staff Member");
+
         var result = await _userManager.CreateAsync(user, model.Password);
 
         if (result.Succeeded) return Ok("Register successful!");
