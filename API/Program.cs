@@ -1,21 +1,27 @@
 using Data;
+using Data.Helpers;
 using Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-ConfigureServices(builder);
+ConfigureServices();
 
 var app = builder.Build();
 
-ConfigureMiddlewares(app);
+ConfigureMiddlewares();
+
+await using var scope = app.Services.CreateAsyncScope();
+var seeder = scope.ServiceProvider.GetService<Seeder>();
+await seeder.SeedRolesAsync();
+await seeder.CreateAdminAsync();
 
 app.Run();
 
 return;
 
-void ConfigureServices(WebApplicationBuilder builder)
+void ConfigureServices()
 {
     builder.Services.AddControllers();
 
@@ -35,9 +41,11 @@ void ConfigureServices(WebApplicationBuilder builder)
 
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+
+    builder.Services.AddTransient<Seeder>();
 }
 
-void ConfigureMiddlewares(WebApplication app)
+void ConfigureMiddlewares()
 {
     if (app.Environment.IsDevelopment())
     {
