@@ -15,7 +15,6 @@ public class PmsDbContext(DbContextOptions options) : IdentityDbContext<User>(op
 
         builder.Entity<User>()
             .Property(u => u.FirstName);
-
         builder.Entity<User>()
             .Property(u => u.LastName);
     }
