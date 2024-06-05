@@ -1,7 +1,9 @@
+using API.Services;
 using Data;
 using Data.Helpers;
 using Data.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +18,10 @@ await using var scope = app.Services.CreateAsyncScope();
 var seeder = scope.ServiceProvider.GetService<Seeder>();
 await seeder.SeedRolesAsync();
 await seeder.CreateAdminAsync();
+
+await using var scope2 = app.Services.CreateAsyncScope();
+var emailService = scope.ServiceProvider.GetService<IEmailSender>();
+await emailService.SendEmailAsync("test@test.com", "Testing Email", "Hello Test");
 
 app.Run();
 
@@ -46,7 +52,10 @@ void ConfigureServices()
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
+    builder.Services.Configure<EmailOptions>(builder.Configuration.GetSection("Email"));
+
     builder.Services.AddTransient<Seeder>();
+    builder.Services.AddTransient<IEmailSender, EmailService>();
 }
 
 void ConfigureMiddlewares()
