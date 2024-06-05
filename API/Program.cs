@@ -19,10 +19,6 @@ var seeder = scope.ServiceProvider.GetService<Seeder>();
 await seeder.SeedRolesAsync();
 await seeder.CreateAdminAsync();
 
-await using var scope2 = app.Services.CreateAsyncScope();
-var emailService = scope.ServiceProvider.GetService<IEmailSender>();
-await emailService.SendEmailAsync("test@test.com", "Testing Email", "Hello Test");
-
 app.Run();
 
 return;

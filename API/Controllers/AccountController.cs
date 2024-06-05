@@ -1,13 +1,18 @@
 using Data.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AccountController(SignInManager<User> signInManager, UserManager<User> userManager) : ControllerBase
+public class AccountController(
+    SignInManager<User> signInManager,
+    UserManager<User> userManager,
+    IEmailSender emailSender) : ControllerBase
 {
+    private readonly IEmailSender _emailSender = emailSender;
     private readonly SignInManager<User> _signInManager = signInManager;
     private readonly UserManager<User> _userManager = userManager;
 
@@ -23,24 +28,38 @@ public class AccountController(SignInManager<User> signInManager, UserManager<Us
             PasswordHash = model.Password
         };
 
+        var result = await _userManager.CreateAsync(user, model.Password!);
+
+        if (!result.Succeeded)
+            return Unauthorized(result.Errors);
+
         await _userManager.AddToRoleAsync(user, "Staff Member");
 
-        var result = await _userManager.CreateAsync(user, model.Password);
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var confirmationLink =
+            Url.Action(
+                nameof(ConfirmEmail),
+                "Account",
+                new { userId = user.Id, token },
+                Request.Scheme);
 
-        if (result.Succeeded) return Ok("Register successful!");
+        await _emailSender.SendEmailAsync(user.Email!, "Email confirmation",
+            $"Please confirm your account by clicking this link: <a href={confirmationLink}>link</a>");
 
-        return Unauthorized(result.Errors);
+        return Ok("Register successful!");
     }
 
     [HttpPost("login")]
     public async Task<ActionResult> Login(LoginModel model)
     {
-        var user = await _userManager.FindByEmailAsync(model.Email);
-        if (user == null) return Unauthorized(new { message = "No user with given e-mail address." });
+        var user = await _userManager.FindByEmailAsync(model.Email!);
+        if (user == null)
+            return Unauthorized(new { message = "No user with given e-mail address." });
 
-        var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
+        var result = await _signInManager.PasswordSignInAsync(user, model.Password!, false, false);
 
-        if (result.Succeeded) return Ok("Login successful!");
+        if (result.Succeeded)
+            return Ok("Login successful!");
 
         return Unauthorized("Login attempt failed!");
     }
@@ -50,5 +69,24 @@ public class AccountController(SignInManager<User> signInManager, UserManager<Us
     {
         await _signInManager.SignOutAsync();
         return Ok("Logout successful!");
+    }
+
+    [HttpGet("confirmEmail")]
+    public async Task<ActionResult> ConfirmEmail(string? userId, string? token)
+    {
+        if (userId == null || token == null)
+            return BadRequest("Invalid email confirmation request.");
+
+        var user = await _userManager.FindByIdAsync(userId);
+
+        if (user == null)
+            return NotFound("User doesn't exist.");
+
+        var result = await _userManager.ConfirmEmailAsync(user, token);
+
+        if (!result.Succeeded)
+            return Unauthorized(result.Errors);
+
+        return Ok("Email confirmed! Now you can go back to PMS and log in.");
     }
 }
