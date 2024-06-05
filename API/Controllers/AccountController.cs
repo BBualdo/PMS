@@ -75,6 +75,9 @@ public class AccountController(
         if (user == null)
             return NotFound("User doesn't exist.");
 
+        if (user.EmailConfirmed)
+            return NoContent();
+
         var result = await _userManager.ConfirmEmailAsync(user, token);
 
         if (!result.Succeeded)
@@ -147,11 +150,12 @@ public class AccountController(
     private async Task SendPasswordRecoveryEmail(User user)
     {
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        var passwordRecoveryLink = $"http:localhost:4200/passwordRecovery?token={token}";
 
         StringBuilder template = new();
         template.Append($"<p>Hello {user.FirstName},</p>");
-        template.Append("<p>Use this token to reset your password:</p>");
-        template.Append($"<p>{token}</p>");
+        template.Append("<p>Here is your link to reset your password:</p>");
+        template.Append($"<a href={passwordRecoveryLink}>Link</a>");
         template.Append("<p>If you didn't ask for password recovery then just ignore that message.</p>");
         template.Append("<p>Best regards, PMS Support.</p>");
 
