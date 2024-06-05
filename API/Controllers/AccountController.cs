@@ -60,8 +60,9 @@ public class AccountController(
 
         if (result.Succeeded)
             return Ok("Login successful!");
-
-        return Unauthorized("Login attempt failed!");
+        return Unauthorized(result.IsNotAllowed
+            ? "Before you sign in you have to confirm your email."
+            : "Login attempt failed!");
     }
 
     [HttpPost("logout")]

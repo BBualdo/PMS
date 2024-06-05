@@ -12,11 +12,6 @@ public class EmailService(IOptions<EmailOptions> options) : IEmailSender
 
     public async Task SendEmailAsync(string toEmail, string subject, string message)
     {
-        await ExecuteAsync(toEmail, subject, message);
-    }
-
-    private async Task ExecuteAsync(string toEmail, string subject, string message)
-    {
         var sender = new SmtpSender(() =>
             new SmtpClient(_options.SmtpServer, _options.Port)
             {
