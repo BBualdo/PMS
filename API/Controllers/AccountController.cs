@@ -35,16 +35,7 @@ public class AccountController(
 
         await _userManager.AddToRoleAsync(user, "Staff Member");
 
-        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        var confirmationLink =
-            Url.Action(
-                nameof(ConfirmEmail),
-                "Account",
-                new { userId = user.Id, token },
-                Request.Scheme);
-
-        await _emailSender.SendEmailAsync(user.Email!, "Email confirmation",
-            $"Please confirm your account by clicking this link: <a href={confirmationLink}>link</a>");
+        await SendConfirmationEmail(user);
 
         return Ok("Register successful!");
     }
@@ -89,5 +80,30 @@ public class AccountController(
             return Unauthorized(result.Errors);
 
         return Ok("Email confirmed! Now you can go back to PMS and log in.");
+    }
+
+    [HttpPost("resendConfirmationEmail")]
+    public async Task<ActionResult> ResendConfirmationEmail(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+            return NotFound("User doesn't exist.");
+
+        SendConfirmationEmail(user);
+        return Ok("Email confirmation link sent. Check your inbox.");
+    }
+
+    private async Task SendConfirmationEmail(User user)
+    {
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var confirmationLink =
+            Url.Action(
+                nameof(ConfirmEmail),
+                "Account",
+                new { userId = user.Id, token },
+                Request.Scheme);
+
+        await _emailSender.SendEmailAsync(user.Email!, "Email confirmation",
+            $"Please confirm your account by clicking this link: <a href={confirmationLink}>link</a>");
     }
 }
