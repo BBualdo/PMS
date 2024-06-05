@@ -88,10 +88,40 @@ public class AccountController(
     {
         var user = await _userManager.FindByEmailAsync(email);
         if (user == null)
-            return NotFound("User doesn't exist.");
+            // Don't notify that user doesn't exist
+            return NoContent();
 
-        SendConfirmationEmail(user);
+        await SendConfirmationEmail(user);
         return Ok("Email confirmation link sent. Check your inbox.");
+    }
+
+    [HttpPost("forgotPassword")]
+    public async Task<ActionResult> ForgotPassword(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+            // Don't notify that user doesn't exist
+            return NoContent();
+
+        await SendPasswordRecoveryEmail(user);
+        return Ok("Password reset email sent. Please check your inbox.");
+    }
+
+    [HttpPost("resetPassword")]
+    public async Task<ActionResult> ResetPassword(
+        [FromQuery] string token,
+        [FromBody] PasswordResetModel model)
+    {
+        var user = await _userManager.FindByEmailAsync(model.Email!);
+        if (user == null)
+            return BadRequest("Changing password failed.");
+
+        var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword!);
+
+        if (!result.Succeeded)
+            return BadRequest(result.Errors);
+
+        return Ok("Password has been changed!");
     }
 
     private async Task SendConfirmationEmail(User user)
@@ -112,5 +142,19 @@ public class AccountController(
         template.Append("<p>Best regards, PMS Support.</p>");
 
         await _emailSender.SendEmailAsync(user.Email!, "Email confirmation", template.ToString());
+    }
+
+    private async Task SendPasswordRecoveryEmail(User user)
+    {
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+        StringBuilder template = new();
+        template.Append($"<p>Hello {user.FirstName},</p>");
+        template.Append("<p>Use this token to reset your password:</p>");
+        template.Append($"<p>{token}</p>");
+        template.Append("<p>If you didn't ask for password recovery then just ignore that message.</p>");
+        template.Append("<p>Best regards, PMS Support.</p>");
+
+        await _emailSender.SendEmailAsync(user.Email!, "Password reset", template.ToString());
     }
 }
