@@ -5,9 +5,11 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>018964aa-355d-4ad4-845a-3d40357789ad</UserSecretsId>
+        <PreserveCompilationContext>true</PreserveCompilationContext>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentEmail.Razor" Version="3.0.2"/>
         <PackageReference Include="FluentEmail.Smtp" Version="3.0.2"/>
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.5"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.5"/>

@@ -1,3 +1,4 @@
+using System.Text;
 using Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -103,7 +104,13 @@ public class AccountController(
                 new { userId = user.Id, token },
                 Request.Scheme);
 
-        await _emailSender.SendEmailAsync(user.Email!, "Email confirmation",
-            $"Please confirm your account by clicking this link: <a href={confirmationLink}>link</a>");
+        StringBuilder template = new();
+        template.Append($"<p>Hello {user.FirstName},</p>");
+        template.Append("<p>Thank you for registering on Product Management System platform.</p>");
+        template.Append("<p>One last step is to confirm your email. You can do that by clicking in this link:</p>");
+        template.Append($"<a href={confirmationLink}>Link</a>");
+        template.Append("<p>Best regards, PMS Support.</p>");
+
+        await _emailSender.SendEmailAsync(user.Email!, "Email confirmation", template.ToString());
     }
 }

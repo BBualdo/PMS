@@ -1,5 +1,6 @@
 ﻿using System.Net.Mail;
 using FluentEmail.Core;
+using FluentEmail.Razor;
 using FluentEmail.Smtp;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
@@ -22,12 +23,13 @@ public class EmailService(IOptions<EmailOptions> options) : IEmailSender
             });
 
         Email.DefaultSender = sender;
+        Email.DefaultRenderer = new RazorRenderer();
 
         var email = await Email
             .From(_options.Sender, _options.SenderName)
             .To(toEmail)
             .Subject(subject)
-            .Body(message)
+            .UsingTemplate(message, new { }, true)
             .SendAsync();
 
         if (!email.Successful)
