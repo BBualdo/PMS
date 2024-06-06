@@ -15,6 +15,7 @@ import { RegisterModel } from '../../../../../models/RegisterModel';
 import { AuthService } from '../../../../../services/auth.service';
 import { LoadingSpinnerComponent } from '../../../../Shared/loading-spinner/loading-spinner.component';
 import { LoadingService } from '../../../../../services/loading.service';
+import { RegisterSuccessComponent } from './register-success/register-success.component';
 
 @Component({
   selector: 'app-register',
@@ -26,29 +27,35 @@ import { LoadingService } from '../../../../../services/loading.service';
     NgClass,
     LoadingSpinnerComponent,
     AsyncPipe,
+    RegisterSuccessComponent,
   ],
   templateUrl: './register.component.html',
 })
 export class RegisterComponent {
+  isRegisteringSuccess = false;
+
   registerForm: FormGroup = new FormGroup(
     {
-      firstName: new FormControl<string>('', [
+      firstName: new FormControl<string>('Test1', [
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(50),
       ]),
-      lastName: new FormControl<string>('', [
+      lastName: new FormControl<string>('Test1', [
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(50),
       ]),
-      email: new FormControl<string>('', [Validators.required, emailValidator]),
-      password: new FormControl('', [
+      email: new FormControl<string>('test1@test.com', [
+        Validators.required,
+        emailValidator,
+      ]),
+      password: new FormControl('StrangeWeirdPassword123#@!', [
         Validators.required,
         Validators.minLength(6),
         passwordValidator,
       ]),
-      confirmPassword: new FormControl('', [
+      confirmPassword: new FormControl('StrangeWeirdPassword123#@!', [
         Validators.required,
         Validators.minLength(6),
       ]),
@@ -71,7 +78,9 @@ export class RegisterComponent {
         password: formValues.password,
       };
 
-      this.authService.register(model).subscribe();
+      this.authService.register(model).subscribe((value) => {
+        if (value) this.isRegisteringSuccess = true;
+      });
     }
   }
 }

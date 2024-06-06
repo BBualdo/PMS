@@ -17,19 +17,21 @@ export class AuthService {
     private loadingService: LoadingService,
   ) {}
 
-  register(model: RegisterModel): Observable<RegisterModel> {
+  register(model: RegisterModel): Observable<string> {
     this.errorsService.clear();
     this.loadingService.startLoading();
-    return this.http.post(url + 'Account/register', model).pipe(
-      catchError((error) => of(this.handleErrors(error))),
-      finalize(() => this.loadingService.stopLoading()),
-    );
+    return this.http
+      .post(url + 'Account/register', model, { responseType: 'text' })
+      .pipe(
+        catchError((error) => of(this.handleErrors(error))),
+        finalize(() => this.loadingService.stopLoading()),
+      );
   }
 
   login(model: LoginModel): Observable<LoginModel> {
     this.errorsService.clear();
     this.loadingService.startLoading();
-    return this.http.post(url + '/Account/login', model).pipe(
+    return this.http.post<LoginModel>(url + '/Account/login', model).pipe(
       catchError((error) => of(this.handleErrors(error))),
       finalize(() => this.loadingService.stopLoading()),
     );
