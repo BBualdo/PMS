@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   FormControl,
@@ -12,6 +12,7 @@ import { passwordValidator } from '../../../../../validators/password.validator'
 import { matchPasswordValidator } from '../../../../../validators/match-password.validator';
 import { NgClass } from '@angular/common';
 import { RegisterModel } from '../../../../../models/RegisterModel';
+import { AuthService } from '../../../../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -46,6 +47,8 @@ export class RegisterComponent {
     [matchPasswordValidator],
   );
 
+  private authService = inject(AuthService);
+
   register() {
     this.registerForm.markAllAsTouched();
 
@@ -58,7 +61,7 @@ export class RegisterComponent {
         password: formValues.password,
       };
 
-      console.log(model);
+      this.authService.register(model).subscribe();
     }
   }
 }
