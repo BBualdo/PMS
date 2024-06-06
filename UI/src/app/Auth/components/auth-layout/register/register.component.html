@@ -161,19 +161,21 @@
         [ngClass]="{
           'input-error':
             (registerForm.controls['confirmPassword'].touched &&
-            registerForm.controls['confirmPassword'].errors) || registerForm.errors,
+              registerForm.controls['confirmPassword'].errors) ||
+            registerForm.errors,
         }"
       />
 
       @if (
         (registerForm.controls["confirmPassword"].touched &&
-        registerForm.controls["confirmPassword"].errors) || registerForm.errors
+          registerForm.controls["confirmPassword"].errors) ||
+        registerForm.errors
       ) {
         <div>
           @if (registerForm.controls["confirmPassword"].errors?.["required"]) {
             <p class="text-sm text-red-600">Required field</p>
           }
-          @if (registerForm.errors?.['passwordMatchError']) {
+          @if (registerForm.errors?.["passwordMatchError"]) {
             <p class="text-sm text-red-600">Password doesn't match</p>
           }
         </div>
