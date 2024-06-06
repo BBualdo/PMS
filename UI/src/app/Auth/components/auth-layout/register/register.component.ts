@@ -11,6 +11,7 @@ import { emailValidator } from '../../../../../validators/email.validator';
 import { passwordValidator } from '../../../../../validators/password.validator';
 import { matchPasswordValidator } from '../../../../../validators/match-password.validator';
 import { NgClass } from '@angular/common';
+import { RegisterModel } from '../../../../../models/RegisterModel';
 
 @Component({
   selector: 'app-register',
@@ -49,7 +50,15 @@ export class RegisterComponent {
     this.registerForm.markAllAsTouched();
 
     if (this.registerForm.valid) {
-      console.log(this.registerForm.value);
+      const formValues = this.registerForm.value;
+      const model: RegisterModel = {
+        firstName: formValues.firstName,
+        lastName: formValues.lastName,
+        email: formValues.email,
+        password: formValues.password,
+      };
+
+      console.log(model);
     }
   }
 }
