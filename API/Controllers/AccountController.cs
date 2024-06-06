@@ -25,7 +25,7 @@ public class AccountController(
             FirstName = model.FirstName,
             LastName = model.LastName,
             Email = model.Email,
-            UserName = model.Email,
+            UserName = model.Email
         };
 
         var result = await _userManager.CreateAsync(user, model.Password!);
@@ -35,7 +35,7 @@ public class AccountController(
 
         await _userManager.AddToRoleAsync(user, "Staff Member");
 
-        await SendConfirmationEmail(user);
+        await SendConfirmationEmailAsync(user);
 
         return Ok("Register successful!");
     }
@@ -64,11 +64,8 @@ public class AccountController(
     }
 
     [HttpGet("confirmEmail")]
-    public async Task<ActionResult> ConfirmEmail(string? userId, string? token)
+    public async Task<ActionResult> ConfirmEmail(string userId, string token)
     {
-        if (userId == null || token == null)
-            return BadRequest("Invalid email confirmation request.");
-
         var user = await _userManager.FindByIdAsync(userId);
 
         if (user == null)
@@ -77,12 +74,15 @@ public class AccountController(
         if (user.EmailConfirmed)
             return NoContent();
 
+        // Url Encoding and Decoding workaround
+        token = token.Replace(" ", "+");
+
         var result = await _userManager.ConfirmEmailAsync(user, token);
 
         if (!result.Succeeded)
             return Unauthorized(result.Errors);
 
-        return Ok("Email confirmed! Now you can go back to PMS and log in.");
+        return Ok("Email confirmed.");
     }
 
     [HttpPost("resendConfirmationEmail")]
@@ -93,7 +93,7 @@ public class AccountController(
             // Don't notify that user doesn't exist
             return NoContent();
 
-        await SendConfirmationEmail(user);
+        await SendConfirmationEmailAsync(user);
         return Ok("Email confirmation link sent. Check your inbox.");
     }
 
@@ -105,7 +105,7 @@ public class AccountController(
             // Don't notify that user doesn't exist
             return NoContent();
 
-        await SendPasswordRecoveryEmail(user);
+        await SendPasswordRecoveryEmailAsync(user);
         return Ok("Password reset email sent. Please check your inbox.");
     }
 
@@ -126,15 +126,10 @@ public class AccountController(
         return Ok("Password has been changed!");
     }
 
-    private async Task SendConfirmationEmail(User user)
+    private async Task SendConfirmationEmailAsync(User user)
     {
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        var confirmationLink =
-            Url.Action(
-                nameof(ConfirmEmail),
-                "Account",
-                new { userId = user.Id, token },
-                Request.Scheme);
+        var confirmationLink = $"http://localhost:4200/emailConfirmation/?userId={user.Id}&token={token}";
 
         StringBuilder template = new();
         template.Append($"<p>Hello {user.FirstName},</p>");
@@ -146,7 +141,7 @@ public class AccountController(
         await _emailSender.SendEmailAsync(user.Email!, "Email confirmation", template.ToString());
     }
 
-    private async Task SendPasswordRecoveryEmail(User user)
+    private async Task SendPasswordRecoveryEmailAsync(User user)
     {
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
         var passwordRecoveryLink = $"http:localhost:4200/passwordRecovery?token={token}";

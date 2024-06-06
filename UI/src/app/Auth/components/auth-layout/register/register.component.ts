@@ -50,12 +50,12 @@ export class RegisterComponent {
         Validators.required,
         emailValidator,
       ]),
-      password: new FormControl('StrangeWeirdPassword123#@!', [
+      password: new FormControl('Test123!', [
         Validators.required,
         Validators.minLength(6),
         passwordValidator,
       ]),
-      confirmPassword: new FormControl('StrangeWeirdPassword123#@!', [
+      confirmPassword: new FormControl('Test123!', [
         Validators.required,
         Validators.minLength(6),
       ]),

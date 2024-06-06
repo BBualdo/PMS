@@ -31,7 +31,7 @@ export class AuthService {
   login(model: LoginModel): Observable<LoginModel> {
     this.errorsService.clear();
     this.loadingService.startLoading();
-    return this.http.post<LoginModel>(url + '/Account/login', model).pipe(
+    return this.http.post<LoginModel>(url + 'Account/login', model).pipe(
       catchError((error) => of(this.handleErrors(error))),
       finalize(() => this.loadingService.stopLoading()),
     );
@@ -40,10 +40,23 @@ export class AuthService {
   logout(): Observable<any> {
     this.errorsService.clear();
     this.loadingService.startLoading();
-    return this.http.post(url + '/Account/logout', {}).pipe(
+    return this.http.post(url + 'Account/logout', {}).pipe(
       catchError((error) => of(this.handleErrors(error))),
       finalize(() => this.loadingService.stopLoading()),
     );
+  }
+
+  confirmEmail(userId: string, token: string): Observable<string> {
+    this.errorsService.clear();
+    this.loadingService.startLoading();
+    return this.http
+      .get(url + `Account/confirmEmail/?userId=${userId}&token=${token}`, {
+        responseType: 'text',
+      })
+      .pipe(
+        catchError((error) => of(this.handleErrors(error))),
+        finalize(() => this.loadingService.stopLoading()),
+      );
   }
 
   private handleErrors(error: HttpErrorResponse): any {
