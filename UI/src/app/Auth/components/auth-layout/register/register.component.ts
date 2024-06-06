@@ -10,14 +10,23 @@ import {
 import { emailValidator } from '../../../../../validators/email.validator';
 import { passwordValidator } from '../../../../../validators/password.validator';
 import { matchPasswordValidator } from '../../../../../validators/match-password.validator';
-import { NgClass } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { RegisterModel } from '../../../../../models/RegisterModel';
 import { AuthService } from '../../../../../services/auth.service';
+import { LoadingSpinnerComponent } from '../../../../Shared/loading-spinner/loading-spinner.component';
+import { LoadingService } from '../../../../../services/loading.service';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterLink, FormsModule, ReactiveFormsModule, NgClass],
+  imports: [
+    RouterLink,
+    FormsModule,
+    ReactiveFormsModule,
+    NgClass,
+    LoadingSpinnerComponent,
+    AsyncPipe,
+  ],
   templateUrl: './register.component.html',
 })
 export class RegisterComponent {
@@ -48,6 +57,7 @@ export class RegisterComponent {
   );
 
   private authService = inject(AuthService);
+  public loadingService = inject(LoadingService);
 
   register() {
     this.registerForm.markAllAsTouched();
