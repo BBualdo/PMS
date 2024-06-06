@@ -1,5 +1,9 @@
-<form class="flex flex-col gap-10">
-  <div class="flex flex-col gap-6">
+<form
+  (ngSubmit)="register()"
+  class="flex flex-col gap-10"
+  [formGroup]="registerForm"
+>
+  <div class="flex flex-col gap-4">
     <div class="form-field">
       <label for="firstName">First name</label>
       <input
@@ -10,7 +14,32 @@
         minlength="2"
         maxlength="50"
         required
+        formControlName="firstName"
+        [ngClass]="{
+          'input-error':
+            registerForm.controls['firstName'].touched &&
+            registerForm.controls['firstName'].errors,
+        }"
       />
+
+      @if (
+        registerForm.controls["firstName"].touched &&
+        registerForm.controls["firstName"].errors
+      ) {
+        <div>
+          @if (registerForm.controls["firstName"].errors!["required"]) {
+            <p class="text-sm text-red-600">Required field</p>
+          }
+          @if (
+            registerForm.controls["firstName"].errors!["minlength"] ||
+            registerForm.controls["firstName"].errors!["maxlength"]
+          ) {
+            <p class="text-sm text-red-600">
+              Must be between 2 and 50 characters
+            </p>
+          }
+        </div>
+      }
     </div>
 
     <div class="form-field">
@@ -23,7 +52,32 @@
         minlength="2"
         maxlength="50"
         required
+        formControlName="lastName"
+        [ngClass]="{
+          'input-error':
+            registerForm.controls['lastName'].touched &&
+            registerForm.controls['lastName'].errors,
+        }"
       />
+
+      @if (
+        registerForm.controls["lastName"].touched &&
+        registerForm.controls["lastName"].errors
+      ) {
+        <div>
+          @if (registerForm.controls["lastName"].errors!["required"]) {
+            <p class="text-sm text-red-600">Required field</p>
+          }
+          @if (
+            registerForm.controls["lastName"].errors!["minlength"] ||
+            registerForm.controls["lastName"].errors!["maxlength"]
+          ) {
+            <p class="text-sm text-red-600">
+              Must be between 2 and 50 characters
+            </p>
+          }
+        </div>
+      }
     </div>
 
     <div class="form-field">
@@ -36,17 +90,94 @@
         minlength="2"
         maxlength="50"
         required
+        formControlName="email"
+        [ngClass]="{
+          'input-error':
+            registerForm.controls['email'].touched &&
+            registerForm.controls['email'].errors,
+        }"
       />
+
+      @if (
+        registerForm.controls["email"].touched &&
+        registerForm.controls["email"].errors
+      ) {
+        <div>
+          @if (registerForm.controls["email"].errors!["required"]) {
+            <p class="text-sm text-red-600">Required field</p>
+          }
+          @if (registerForm.controls["email"].errors!["invalidEmail"]) {
+            <p class="text-sm text-red-600">Invalid email</p>
+          }
+        </div>
+      }
     </div>
 
     <div class="form-field">
       <label for="password">Password</label>
-      <input id="password" type="password" class="input w-full" />
+      <input
+        id="password"
+        type="password"
+        class="input w-full"
+        required
+        formControlName="password"
+        [ngClass]="{
+          'input-error':
+            registerForm.controls['password'].touched &&
+            registerForm.controls['password'].errors,
+        }"
+      />
+
+      @if (
+        registerForm.controls["password"].touched &&
+        registerForm.controls["password"].errors
+      ) {
+        <div>
+          @if (registerForm.controls["password"].errors!["required"]) {
+            <p class="text-sm text-red-600">Required field</p>
+          }
+          @if (registerForm.controls["password"].errors!["minlength"]) {
+            <p class="text-sm text-red-600">
+              Must be at least 6 characters long
+            </p>
+          }
+          @if (registerForm.controls["password"].errors!["invalidPassword"]) {
+            <p class="text-sm text-red-600">
+              Must contain: uppercase, lowercase, digit and special character
+            </p>
+          }
+        </div>
+      }
     </div>
 
     <div class="form-field">
       <label for="confirmPassword">Confirm Password</label>
-      <input id="confirmPassword" type="password" class="input w-full" />
+      <input
+        id="confirmPassword"
+        type="password"
+        class="input w-full"
+        required
+        formControlName="confirmPassword"
+        [ngClass]="{
+          'input-error':
+            (registerForm.controls['confirmPassword'].touched &&
+            registerForm.controls['confirmPassword'].errors) || registerForm.errors,
+        }"
+      />
+
+      @if (
+        (registerForm.controls["confirmPassword"].touched &&
+        registerForm.controls["confirmPassword"].errors) || registerForm.errors
+      ) {
+        <div>
+          @if (registerForm.controls["confirmPassword"].errors?.["required"]) {
+            <p class="text-sm text-red-600">Required field</p>
+          }
+          @if (registerForm.errors?.['passwordMatchError']) {
+            <p class="text-sm text-red-600">Password doesn't match</p>
+          }
+        </div>
+      }
     </div>
   </div>
   <button class="btn primary-btn">Create account</button>

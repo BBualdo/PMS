@@ -42,6 +42,10 @@ body {
     @apply bg-steel-blue rounded-lg px-3 py-1 text-lg text-white focus:outline-white;
   }
 
+  .input-error {
+    @apply bg-red-400;
+  }
+
   .btn {
     @apply cursor-pointer rounded-lg px-4 py-2 text-center text-lg;
   }
