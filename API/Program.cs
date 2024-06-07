@@ -45,6 +45,16 @@ void ConfigureServices()
         options.AddPolicy("policy", policyBuilder =>
             policyBuilder.AllowCredentials().AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200")));
 
+    builder.Services.ConfigureApplicationCookie(options =>
+    {
+        options.Cookie.Name = "PMSAuthToken";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.SameSite = SameSiteMode.None;
+        options.SlidingExpiration = true;
+    });
+
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 

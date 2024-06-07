@@ -7,6 +7,7 @@ import { RegisterComponent } from './Auth/components/auth-layout/register/regist
 import { EmailConfirmationComponent } from './Protected/email-confirmation/email-confirmation.component';
 import { emailConfirmationGuard } from '../guards/email-confirmation.guard';
 import { authGuard } from '../guards/auth.guard';
+import { signInGuard } from '../guards/sign-in.guard';
 
 export const routes: Routes = [
   {
@@ -18,6 +19,7 @@ export const routes: Routes = [
   {
     path: '',
     component: AuthLayoutComponent,
+    canActivateChild: [signInGuard],
     children: [
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },

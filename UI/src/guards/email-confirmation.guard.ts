@@ -1,7 +1,7 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 
-export const emailConfirmationGuard: CanActivateFn = (route, state) => {
+export const emailConfirmationGuard: CanActivateFn = (route) => {
   const userId: string | undefined = route.queryParams['userId'];
   const token: string | undefined = route.queryParams['token'];
 

@@ -21,8 +21,8 @@ import { User } from '../models/User';
   providedIn: 'root',
 })
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<User | null> =
-    new BehaviorSubject<User | null>(null);
+  private currentUserSubject: BehaviorSubject<User | undefined> =
+    new BehaviorSubject<User | undefined>(undefined);
   currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(
@@ -32,10 +32,11 @@ export class AuthService {
     private dialog: Dialog,
   ) {}
 
-  getCurrentUser(): Observable<User | null> {
+  // TODO: Refactor this method a bit or handle 401 error differently, because when user is undefined it is spamming with errors.
+  getCurrentUser(): Observable<User | undefined> {
     this.errorsService.clear();
     this.loadingService.startLoading();
-    return this.http.get<User | null>(url + 'Account/currentUser').pipe(
+    return this.http.get<User | undefined>(url + 'Account/currentUser').pipe(
       tap((user) => this.currentUserSubject.next(user)),
       catchError((error) => of(this.handleErrors(error))),
       finalize(() => this.loadingService.stopLoading()),
@@ -84,12 +85,26 @@ export class AuthService {
 
   private handleErrors(error: HttpErrorResponse): any {
     switch (error.status) {
+      case 500: {
+        this.errorsService.add('Something went wrong. Try again later.');
+        break;
+      }
       case 409: {
-        this.errorsService.add(error.error[1].description);
+        error.error.forEach((err: { code: string; description: string }) =>
+          this.errorsService.add(err.description),
+        );
+
         break;
       }
       case 401: {
-        this.errorsService.add('You must be signed in to access this page.');
+        if (error.error) {
+          error.error.forEach((err: { code: string; description: string }) =>
+            this.errorsService.add(err.description),
+          );
+        } else {
+          this.errorsService.add('You must be signed in to access this page.');
+        }
+
         break;
       }
       case 0: {

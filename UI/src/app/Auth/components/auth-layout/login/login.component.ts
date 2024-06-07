@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   FormControl,
@@ -9,12 +9,22 @@ import {
 } from '@angular/forms';
 import { emailValidator } from '../../../../../validators/email.validator';
 import { LoginModel } from '../../../../../models/LoginModel';
-import { NgClass } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
+import { LoadingSpinnerComponent } from '../../../../Shared/loading-spinner/loading-spinner.component';
+import { LoadingService } from '../../../../../services/loading.service';
+import { AuthService } from '../../../../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterLink, FormsModule, ReactiveFormsModule, NgClass],
+  imports: [
+    RouterLink,
+    FormsModule,
+    ReactiveFormsModule,
+    NgClass,
+    AsyncPipe,
+    LoadingSpinnerComponent,
+  ],
   templateUrl: './login.component.html',
 })
 export class LoginComponent {
@@ -22,6 +32,9 @@ export class LoginComponent {
     email: new FormControl<string>('', [Validators.required, emailValidator]),
     password: new FormControl('', [Validators.required]),
   });
+
+  private authService = inject(AuthService);
+  loadingService = inject(LoadingService);
 
   login() {
     this.loginForm.markAllAsTouched();
@@ -33,7 +46,7 @@ export class LoginComponent {
         password: formValues.password,
       };
 
-      console.log(model);
+      this.authService.login(model).subscribe((value) => console.log(value));
     }
   }
 }

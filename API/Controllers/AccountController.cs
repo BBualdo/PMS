@@ -24,7 +24,8 @@ public class AccountController(
     {
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
-            return Unauthorized(new { message = "User is logged out. Sign in again to continue." });
+            return Unauthorized(new[]
+                { new { code = "Session expired", description = "User is logged out. Sign in again to continue." } });
         var roles = await _userManager.GetRolesAsync(user);
         return Ok(new
         {
@@ -64,15 +65,16 @@ public class AccountController(
     {
         var user = await _userManager.FindByEmailAsync(model.Email!);
         if (user == null)
-            return Conflict(new { message = "No user with given e-mail address." });
+            return Conflict(new[]
+                { new { code = "UserNotFound", description = "No user with given e-mail address." } });
 
         var result = await _signInManager.PasswordSignInAsync(user, model.Password!, false, false);
 
         if (result.Succeeded)
             return Ok(result);
         return Unauthorized(result.IsNotAllowed
-            ? "Before you sign in you have to confirm your email."
-            : "Login attempt failed!");
+            ? new[] { new { code = "NotAllowed", description = "Before you sign in you have to confirm your email." } }
+            : new[] { new { code = "LoginFailed", description = "Login attempt failed!" } });
     }
 
     [HttpPost("logout")]

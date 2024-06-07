@@ -36,26 +36,23 @@ export class RegisterComponent {
 
   registerForm: FormGroup = new FormGroup(
     {
-      firstName: new FormControl<string>('Test1', [
+      firstName: new FormControl<string>('', [
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(50),
       ]),
-      lastName: new FormControl<string>('Test1', [
+      lastName: new FormControl<string>('', [
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(50),
       ]),
-      email: new FormControl<string>('test1@test.com', [
-        Validators.required,
-        emailValidator,
-      ]),
-      password: new FormControl('Test123!', [
+      email: new FormControl<string>('', [Validators.required, emailValidator]),
+      password: new FormControl('', [
         Validators.required,
         Validators.minLength(6),
         passwordValidator,
       ]),
-      confirmPassword: new FormControl('Test123!', [
+      confirmPassword: new FormControl('', [
         Validators.required,
         Validators.minLength(6),
       ]),
