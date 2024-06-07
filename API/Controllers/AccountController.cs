@@ -1,5 +1,6 @@
 using System.Text;
 using Data.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,24 @@ public class AccountController(
     private readonly IEmailSender _emailSender = emailSender;
     private readonly SignInManager<User> _signInManager = signInManager;
     private readonly UserManager<User> _userManager = userManager;
+
+    [HttpGet("currentUser")]
+    [Authorize]
+    public async Task<ActionResult> GetCurrentUser()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+            return Unauthorized(new { message = "User is logged out. Sign in again to continue." });
+        var roles = await _userManager.GetRolesAsync(user);
+        return Ok(new
+        {
+            userId = user.Id,
+            firstName = user.FirstName,
+            lastName = user.LastName,
+            email = user.Email,
+            roles
+        });
+    }
 
     [HttpPost("register")]
     public async Task<ActionResult> Register(RegisterModel model)
