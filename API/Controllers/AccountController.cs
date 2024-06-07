@@ -1,6 +1,5 @@
 using System.Text;
 using Data.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +18,6 @@ public class AccountController(
     private readonly UserManager<User> _userManager = userManager;
 
     [HttpGet("currentUser")]
-    [Authorize]
     public async Task<ActionResult> GetCurrentUser()
     {
         var user = await _userManager.GetUserAsync(User);

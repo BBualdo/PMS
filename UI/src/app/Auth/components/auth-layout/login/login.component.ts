@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {
   FormControl,
   FormGroup,
@@ -35,6 +35,7 @@ export class LoginComponent {
 
   private authService = inject(AuthService);
   loadingService = inject(LoadingService);
+  private router = inject(Router);
 
   login() {
     this.loginForm.markAllAsTouched();
@@ -46,7 +47,9 @@ export class LoginComponent {
         password: formValues.password,
       };
 
-      this.authService.login(model).subscribe((value) => console.log(value));
+      this.authService
+        .login(model)
+        .subscribe(() => this.router.navigate(['../']));
     }
   }
 }
