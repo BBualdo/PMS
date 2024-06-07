@@ -45,12 +45,12 @@ public class AccountController(
     {
         var user = await _userManager.FindByEmailAsync(model.Email!);
         if (user == null)
-            return Unauthorized(new { message = "No user with given e-mail address." });
+            return Conflict(new { message = "No user with given e-mail address." });
 
         var result = await _signInManager.PasswordSignInAsync(user, model.Password!, false, false);
 
         if (result.Succeeded)
-            return Ok("Login successful!");
+            return Ok(result);
         return Unauthorized(result.IsNotAllowed
             ? "Before you sign in you have to confirm your email."
             : "Login attempt failed!");

@@ -39,7 +39,7 @@ body {
   }
 
   .input {
-    @apply bg-steel-blue rounded-lg px-3 py-1 text-lg text-white focus:outline-white;
+    @apply rounded-lg bg-steel-blue px-3 py-1 text-lg text-white focus:outline-white;
   }
 
   .input-error {
@@ -51,6 +51,6 @@ body {
   }
 
   .primary-btn {
-    @apply bg-royal-blue hover:bg-royal-blue-hover font-bold text-white transition-all duration-200;
+    @apply bg-royal-blue font-bold text-white transition-all duration-200 enabled:hover:bg-royal-blue-hover disabled:cursor-default disabled:opacity-70;
   }
 }

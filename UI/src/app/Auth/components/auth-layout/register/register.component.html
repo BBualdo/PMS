@@ -187,7 +187,10 @@
         }
       </div>
     </div>
-    <button class="btn primary-btn">
+    <button
+      [disabled]="loadingService.isLoading$ | async"
+      class="btn primary-btn"
+    >
       @if (loadingService.isLoading$ | async) {
         <loading-spinner class="h-8 w-8" />
       } @else {
