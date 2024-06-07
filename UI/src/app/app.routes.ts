@@ -6,11 +6,13 @@ import { LoginComponent } from './Auth/components/auth-layout/login/login.compon
 import { RegisterComponent } from './Auth/components/auth-layout/register/register.component';
 import { EmailConfirmationComponent } from './Protected/email-confirmation/email-confirmation.component';
 import { emailConfirmationGuard } from '../guards/email-confirmation.guard';
+import { authGuard } from '../guards/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
     component: DashboardLayoutComponent,
+    canActivateChild: [authGuard],
     children: [{ path: '', component: DashboardComponent }],
   },
   {
