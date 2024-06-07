@@ -32,7 +32,6 @@ export class AuthService {
     private dialog: Dialog,
   ) {}
 
-  // TODO: Refactor this method a bit or handle 401 error differently, because when user is undefined it is spamming with errors.
   getCurrentUser(): Observable<User | undefined> {
     this.errorsService.clear();
     this.loadingService.startLoading();

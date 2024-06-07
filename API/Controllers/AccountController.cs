@@ -22,8 +22,7 @@ public class AccountController(
     {
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
-            return Unauthorized(new[]
-                { new { code = "Session expired", description = "User is logged out. Sign in again to continue." } });
+            return NoContent();
         var roles = await _userManager.GetRolesAsync(user);
         return Ok(new
         {
@@ -79,7 +78,7 @@ public class AccountController(
     public async Task<ActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
-        return Ok("Logout successful!");
+        return NoContent();
     }
 
     [HttpGet("confirmEmail")]
