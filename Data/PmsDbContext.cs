@@ -13,9 +13,11 @@ public class PmsDbContext(DbContextOptions options) : IdentityDbContext<User>(op
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<User>()
-            .Property(u => u.FirstName);
-        builder.Entity<User>()
-            .Property(u => u.LastName);
+        builder.Entity<User>().Property(u => u.UserName)
+            .IsRequired(false);
+        builder.Entity<User>().Property(u => u.FirstName)
+            .HasMaxLength(50);
+        builder.Entity<User>().Property(u => u.LastName)
+            .HasMaxLength(50);
     }
 }

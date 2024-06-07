@@ -6,6 +6,8 @@ import { ErrorsService } from './errors.service';
 import { LoadingService } from './loading.service';
 import { url } from '../config/config';
 import { LoginModel } from '../models/LoginModel';
+import { Dialog } from '@angular/cdk/dialog';
+import { ErrorDialogComponent } from '../app/Shared/error-dialog/error-dialog.component';
 
 @Injectable({
   providedIn: 'root',
@@ -15,17 +17,16 @@ export class AuthService {
     private http: HttpClient,
     private errorsService: ErrorsService,
     private loadingService: LoadingService,
+    private dialog: Dialog,
   ) {}
 
   register(model: RegisterModel): Observable<string> {
     this.errorsService.clear();
     this.loadingService.startLoading();
-    return this.http
-      .post(url + 'Account/register', model, { responseType: 'text' })
-      .pipe(
-        catchError((error) => of(this.handleErrors(error))),
-        finalize(() => this.loadingService.stopLoading()),
-      );
+    return this.http.post(url + 'Account/register', model).pipe(
+      catchError((error) => of(this.handleErrors(error))),
+      finalize(() => this.loadingService.stopLoading()),
+    );
   }
 
   login(model: LoginModel): Observable<LoginModel> {
@@ -60,16 +61,18 @@ export class AuthService {
   }
 
   private handleErrors(error: HttpErrorResponse): any {
-    if (error.status == 200) {
+    switch (error.status) {
+      case 409: {
+        this.errorsService.add(error.error[1].description);
+        break;
+      }
+      case 0: {
+        this.errorsService.add('Connection failed. Please try again later.');
+        break;
+      }
     }
-    if (error.status == 400) {
-    }
-    if (error.status == 401) {
-    }
-    if (error.status == 404) {
-    }
-    if (error.status == 500) {
-    }
+
+    this.dialog.open(ErrorDialogComponent);
 
     console.log(error);
   }

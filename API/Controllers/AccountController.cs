@@ -31,13 +31,13 @@ public class AccountController(
         var result = await _userManager.CreateAsync(user, model.Password!);
 
         if (!result.Succeeded)
-            return Unauthorized(result.Errors);
+            return Conflict(result.Errors);
 
         await _userManager.AddToRoleAsync(user, "Staff Member");
 
         await SendConfirmationEmailAsync(user);
 
-        return Ok("Register successful!");
+        return Ok(result);
     }
 
     [HttpPost("login")]
