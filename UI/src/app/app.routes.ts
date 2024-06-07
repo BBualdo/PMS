@@ -8,6 +8,7 @@ import { EmailConfirmationComponent } from './Protected/email-confirmation/email
 import { emailConfirmationGuard } from '../guards/email-confirmation.guard';
 import { authGuard } from '../guards/auth.guard';
 import { signInGuard } from '../guards/sign-in.guard';
+import { ForgotPasswordComponent } from './Auth/components/auth-layout/forgot-password/forgot-password.component';
 
 export const routes: Routes = [
   {
@@ -24,9 +25,13 @@ export const routes: Routes = [
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
       {
-        path: 'emailConfirmation',
+        path: 'email-confirmation',
         component: EmailConfirmationComponent,
         canActivate: [emailConfirmationGuard],
+      },
+      {
+        path: 'forgot-password',
+        component: ForgotPasswordComponent,
       },
     ],
   },

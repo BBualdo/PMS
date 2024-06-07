@@ -16,6 +16,7 @@ import { LoginModel } from '../models/LoginModel';
 import { Dialog } from '@angular/cdk/dialog';
 import { ErrorDialogComponent } from '../app/Shared/error-dialog/error-dialog.component';
 import { User } from '../models/User';
+import { PasswordForgotReq } from '../models/PasswordForgotReq';
 
 @Injectable({
   providedIn: 'root',
@@ -33,7 +34,7 @@ export class AuthService {
   ) {}
 
   getCurrentUser(): Observable<User | undefined> {
-    this.errorsService.clear();
+    // this.errorsService.clear();
     this.loadingService.startLoading();
     return this.http.get<User | undefined>(url + 'Account/currentUser').pipe(
       tap((user) => this.currentUserSubject.next(user)),
@@ -76,6 +77,17 @@ export class AuthService {
       .get(url + `Account/confirmEmail/?userId=${userId}&token=${token}`, {
         responseType: 'text',
       })
+      .pipe(
+        catchError((error) => of(this.handleErrors(error))),
+        finalize(() => this.loadingService.stopLoading()),
+      );
+  }
+
+  passwordRecovery(req: PasswordForgotReq): Observable<string> {
+    this.errorsService.clear();
+    this.loadingService.startLoading();
+    return this.http
+      .post(url + 'Account/forgotPassword', req, { responseType: 'text' })
       .pipe(
         catchError((error) => of(this.handleErrors(error))),
         finalize(() => this.loadingService.stopLoading()),

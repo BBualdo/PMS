@@ -47,10 +47,14 @@ body {
   }
 
   .btn {
-    @apply cursor-pointer rounded-lg px-4 py-2 text-center text-lg;
+    @apply cursor-pointer rounded-lg px-4 py-2 text-center text-lg disabled:cursor-default disabled:opacity-70;
   }
 
   .primary-btn {
-    @apply bg-royal-blue font-bold text-white transition-all duration-200 enabled:hover:bg-royal-blue-hover disabled:cursor-default disabled:opacity-70;
+    @apply bg-royal-blue font-bold text-white transition-all duration-200 enabled:hover:bg-royal-blue-hover;
+  }
+
+  .secondary-btn {
+    @apply border-2 border-steel-blue bg-midnight-blue text-white transition-all duration-200 enabled:hover:bg-steel-blue/50;
   }
 }

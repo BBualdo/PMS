@@ -116,9 +116,9 @@ public class AccountController(
     }
 
     [HttpPost("forgotPassword")]
-    public async Task<ActionResult> ForgotPassword(string email)
+    public async Task<ActionResult> ForgotPassword(PasswordForgotReq req)
     {
-        var user = await _userManager.FindByEmailAsync(email);
+        var user = await _userManager.FindByEmailAsync(req.Email!);
         if (user == null)
             // Don't notify that user doesn't exist
             return NoContent();
@@ -147,7 +147,7 @@ public class AccountController(
     private async Task SendConfirmationEmailAsync(User user)
     {
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        var confirmationLink = $"http://localhost:4200/emailConfirmation/?userId={user.Id}&token={token}";
+        var confirmationLink = $"http://localhost:4200/email-confirmation/?userId={user.Id}&token={token}";
 
         StringBuilder template = new();
         template.Append($"<p>Hello {user.FirstName},</p>");
@@ -162,7 +162,7 @@ public class AccountController(
     private async Task SendPasswordRecoveryEmailAsync(User user)
     {
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-        var passwordRecoveryLink = $"http:localhost:4200/passwordRecovery?token={token}";
+        var passwordRecoveryLink = $"http://localhost:4200/password-recovery/?token={token}";
 
         StringBuilder template = new();
         template.Append($"<p>Hello {user.FirstName},</p>");
