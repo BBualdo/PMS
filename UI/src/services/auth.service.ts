@@ -13,10 +13,10 @@ import { ErrorsService } from './errors.service';
 import { LoadingService } from './loading.service';
 import { url } from '../config/config';
 import { LoginModel } from '../models/LoginModel';
-import { Dialog } from '@angular/cdk/dialog';
-import { ErrorDialogComponent } from '../app/Shared/error-dialog/error-dialog.component';
 import { User } from '../models/User';
 import { PasswordForgotReq } from '../models/PasswordForgotReq';
+import { Dialog } from '@angular/cdk/dialog';
+import { ErrorDialogComponent } from '../app/Shared/error-dialog/error-dialog.component';
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +34,6 @@ export class AuthService {
   ) {}
 
   getCurrentUser(): Observable<User | undefined> {
-    // this.errorsService.clear();
     this.loadingService.startLoading();
     return this.http.get<User | undefined>(url + 'Account/currentUser').pipe(
       tap((user) => this.currentUserSubject.next(user)),
@@ -44,7 +43,6 @@ export class AuthService {
   }
 
   register(model: RegisterModel): Observable<string> {
-    this.errorsService.clear();
     this.loadingService.startLoading();
     return this.http.post(url + 'Account/register', model).pipe(
       catchError((error) => of(this.handleErrors(error))),
@@ -53,7 +51,6 @@ export class AuthService {
   }
 
   login(model: LoginModel): Observable<LoginModel> {
-    this.errorsService.clear();
     this.loadingService.startLoading();
     return this.http.post<LoginModel>(url + 'Account/login', model).pipe(
       catchError((error) => of(this.handleErrors(error))),
@@ -62,7 +59,6 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    this.errorsService.clear();
     this.loadingService.startLoading();
     return this.http.post(url + 'Account/logout', {}).pipe(
       catchError((error) => of(this.handleErrors(error))),
@@ -71,7 +67,6 @@ export class AuthService {
   }
 
   confirmEmail(userId: string, token: string): Observable<string> {
-    this.errorsService.clear();
     this.loadingService.startLoading();
     return this.http
       .get(url + `Account/confirmEmail/?userId=${userId}&token=${token}`, {
@@ -84,7 +79,6 @@ export class AuthService {
   }
 
   passwordRecovery(req: PasswordForgotReq): Observable<string> {
-    this.errorsService.clear();
     this.loadingService.startLoading();
     return this.http
       .post(url + 'Account/forgotPassword', req, { responseType: 'text' })

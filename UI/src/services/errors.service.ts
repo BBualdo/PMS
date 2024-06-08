@@ -10,8 +10,6 @@ export class ErrorsService {
   isError$: Observable<boolean> = this.isErrorSubject.asObservable();
   errors: string[] = [];
 
-  constructor() {}
-
   add(errorMessage: string) {
     this.isErrorSubject.next(true);
     this.errors.push(errorMessage);

@@ -9,6 +9,7 @@ import { emailConfirmationGuard } from '../guards/email-confirmation.guard';
 import { authGuard } from '../guards/auth.guard';
 import { signInGuard } from '../guards/sign-in.guard';
 import { ForgotPasswordComponent } from './Auth/components/auth-layout/forgot-password/forgot-password.component';
+import { NewPasswordFormComponent } from './Auth/components/auth-layout/new-password-form/new-password-form.component';
 
 export const routes: Routes = [
   {
@@ -32,6 +33,10 @@ export const routes: Routes = [
       {
         path: 'forgot-password',
         component: ForgotPasswordComponent,
+      },
+      {
+        path: 'password-recovery',
+        component: NewPasswordFormComponent,
       },
     ],
   },
