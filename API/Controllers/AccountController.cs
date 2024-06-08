@@ -132,16 +132,16 @@ public class AccountController(
     {
         var user = await _userManager.FindByEmailAsync(model.Email!);
         if (user == null)
-            return BadRequest("Changing password failed.");
+            return BadRequest(new[] { new { code = "RecoveryFailure", description = "Changing password failed." } });
 
         token = token.Replace(" ", "+");
 
         var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword!);
 
         if (!result.Succeeded)
-            return BadRequest(result.Errors);
+            return BadRequest(new[] { new { code = "RecoveryFailure", description = "Password recovery failed." } });
 
-        return Ok("Password has been changed!");
+        return Ok(new { message = "Password has been changed!" });
     }
 
     private async Task SendConfirmationEmailAsync(User user)

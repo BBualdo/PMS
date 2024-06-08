@@ -89,12 +89,10 @@ export class AuthService {
       );
   }
 
-  resetPassword(token: string, model: PasswordResetModel): Observable<string> {
+  resetPassword(token: string, model: PasswordResetModel): Observable<any> {
     this.loadingService.startLoading();
     return this.http
-      .post(url + `Account/resetPassword/?token=${token}`, model, {
-        responseType: 'text',
-      })
+      .post(url + `Account/resetPassword/?token=${token}`, model)
       .pipe(
         catchError((error) => of(this.handleErrors(error))),
         finalize(() => this.loadingService.stopLoading()),
@@ -122,7 +120,14 @@ export class AuthService {
         } else {
           this.errorsService.add('You must be signed in to access this page.');
         }
-
+        break;
+      }
+      case 400: {
+        if (error.error) {
+          error.error.forEach((err: { code: string; description: string }) =>
+            this.errorsService.add(err.description),
+          );
+        }
         break;
       }
       case 0: {
