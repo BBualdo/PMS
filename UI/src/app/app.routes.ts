@@ -11,13 +11,19 @@ import { signInGuard } from '../guards/sign-in.guard';
 import { ForgotPasswordComponent } from './Auth/components/auth-layout/forgot-password/forgot-password.component';
 import { NewPasswordFormComponent } from './Auth/components/auth-layout/new-password-form/new-password-form.component';
 import { resetPasswordGuard } from '../guards/reset-password.guard';
+import { ProductsComponent } from './Dashboard/components/products/products.component';
+import { UsersComponent } from './Dashboard/components/users/users.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: DashboardLayoutComponent,
     canActivateChild: [authGuard],
-    children: [{ path: '', component: DashboardComponent }],
+    children: [
+      { path: '', component: DashboardComponent },
+      { path: 'products', component: ProductsComponent },
+      { path: 'users', component: UsersComponent },
+    ],
   },
   {
     path: '',
