@@ -10,6 +10,7 @@ import { authGuard } from '../guards/auth.guard';
 import { signInGuard } from '../guards/sign-in.guard';
 import { ForgotPasswordComponent } from './Auth/components/auth-layout/forgot-password/forgot-password.component';
 import { NewPasswordFormComponent } from './Auth/components/auth-layout/new-password-form/new-password-form.component';
+import { resetPasswordGuard } from '../guards/reset-password.guard';
 
 export const routes: Routes = [
   {
@@ -37,6 +38,7 @@ export const routes: Routes = [
       {
         path: 'password-recovery',
         component: NewPasswordFormComponent,
+        canActivate: [resetPasswordGuard],
       },
     ],
   },

@@ -107,11 +107,10 @@ public class AccountController(
     public async Task<ActionResult> ResendConfirmationEmail(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
-        if (user == null)
+        if (user != null)
             // Don't notify that user doesn't exist
-            return NoContent();
+            await SendConfirmationEmailAsync(user);
 
-        await SendConfirmationEmailAsync(user);
         return Ok("Email confirmation link sent. Check your inbox.");
     }
 
@@ -119,11 +118,10 @@ public class AccountController(
     public async Task<ActionResult> ForgotPassword(PasswordForgotReq req)
     {
         var user = await _userManager.FindByEmailAsync(req.Email!);
-        if (user == null)
+        if (user != null)
             // Don't notify that user doesn't exist
-            return NoContent();
+            await SendPasswordRecoveryEmailAsync(user);
 
-        await SendPasswordRecoveryEmailAsync(user);
         return Ok("Password reset email sent. Please check your inbox.");
     }
 
@@ -135,6 +133,8 @@ public class AccountController(
         var user = await _userManager.FindByEmailAsync(model.Email!);
         if (user == null)
             return BadRequest("Changing password failed.");
+
+        token = token.Replace(" ", "+");
 
         var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword!);
 
