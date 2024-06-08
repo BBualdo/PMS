@@ -57,4 +57,18 @@ body {
   .secondary-btn {
     @apply border-2 border-steel-blue bg-midnight-blue text-white transition-all duration-200 enabled:hover:bg-steel-blue/50;
   }
+
+  .navbar {
+    @apply bg-dark-slate-gray h-14 w-full rounded-tr-lg border-b border-white/10 px-4 py-2;
+  }
+
+  .sidebar {
+    @apply gradient-retro-50 h-full w-12 rounded-l-lg px-4 py-2;
+  }
+
+  @layer utilities {
+    .gradient-retro-50 {
+      @apply bg-gradient-to-t from-sky-900/50 via-violet-600/50 to-sky-900/50;
+    }
+  }
 }
