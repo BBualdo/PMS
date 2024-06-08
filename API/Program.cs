@@ -65,6 +65,7 @@ void ConfigureServices()
     builder.Services.AddTransient<IEmailSender, EmailService>();
     builder.Services.AddScoped<IRepository<Product>, Repository<Product>>();
     builder.Services.AddScoped<IProductsService, ProductsService>();
+    builder.Services.AddScoped<IUsersService, UsersService>();
 }
 
 void ConfigureMiddlewares()
