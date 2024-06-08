@@ -2,6 +2,7 @@ using API.Services;
 using Data;
 using Data.Helpers;
 using Data.Models;
+using Data.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -62,6 +63,8 @@ void ConfigureServices()
 
     builder.Services.AddTransient<Seeder>();
     builder.Services.AddTransient<IEmailSender, EmailService>();
+    builder.Services.AddScoped<IRepository<Product>, Repository<Product>>();
+    builder.Services.AddScoped<IProductsService, ProductsService>();
 }
 
 void ConfigureMiddlewares()
