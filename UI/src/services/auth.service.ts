@@ -17,6 +17,7 @@ import { User } from '../models/User';
 import { PasswordForgotReq } from '../models/PasswordForgotReq';
 import { Dialog } from '@angular/cdk/dialog';
 import { ErrorDialogComponent } from '../app/Shared/error-dialog/error-dialog.component';
+import { PasswordResetModel } from '../models/PasswordResetModel';
 
 @Injectable({
   providedIn: 'root',
@@ -82,6 +83,18 @@ export class AuthService {
     this.loadingService.startLoading();
     return this.http
       .post(url + 'Account/forgotPassword', req, { responseType: 'text' })
+      .pipe(
+        catchError((error) => of(this.handleErrors(error))),
+        finalize(() => this.loadingService.stopLoading()),
+      );
+  }
+
+  resetPassword(token: string, model: PasswordResetModel): Observable<string> {
+    this.loadingService.startLoading();
+    return this.http
+      .post(url + `Account/resetPassword/?token=${token}`, model, {
+        responseType: 'text',
+      })
       .pipe(
         catchError((error) => of(this.handleErrors(error))),
         finalize(() => this.loadingService.stopLoading()),

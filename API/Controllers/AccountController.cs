@@ -162,7 +162,7 @@ public class AccountController(
     private async Task SendPasswordRecoveryEmailAsync(User user)
     {
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-        var passwordRecoveryLink = $"http://localhost:4200/password-recovery/?token={token}";
+        var passwordRecoveryLink = $"http://localhost:4200/password-recovery/?email={user.Email}&token={token}";
 
         StringBuilder template = new();
         template.Append($"<p>Hello {user.FirstName},</p>");
