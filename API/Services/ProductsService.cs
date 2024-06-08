@@ -8,7 +8,7 @@ public class ProductsService(IRepository<Product> productsRepository) : IProduct
 {
     private readonly IRepository<Product> _productsRepository = productsRepository;
 
-    public async Task<PaginatedProducts> GetProducts(int page, int pageSize)
+    public async Task<PaginatedProducts> GetProductsAsync(int page, int pageSize)
     {
         var products = await _productsRepository.GetAsync();
         var totalPages = (int)Math.Ceiling((double)products.Count() / pageSize);
@@ -22,17 +22,17 @@ public class ProductsService(IRepository<Product> productsRepository) : IProduct
         };
     }
 
-    public async Task AddProduct(Product product)
+    public async Task AddProductAsync(Product product)
     {
         await _productsRepository.AddAsync(product);
     }
 
-    public async Task UpdateProduct(Product product)
+    public async Task UpdateProductAsync(Product product)
     {
         await _productsRepository.UpdateAsync(product);
     }
 
-    public async Task DeleteProduct(int id)
+    public async Task DeleteProductAsync(int id)
     {
         var product = await _productsRepository.GetByIdAsync(id);
         await _productsRepository.DeleteAsync(product);
