@@ -1,3 +1,4 @@
+using API.Helpers;
 using API.Services;
 using Data;
 using Data.Helpers;
@@ -63,6 +64,7 @@ void ConfigureServices()
 
     builder.Services.AddTransient<Seeder>();
     builder.Services.AddTransient<IEmailSender, EmailService>();
+    builder.Services.AddTransient<AccountEmailHelper>();
     builder.Services.AddScoped<IRepository<Product>, Repository<Product>>();
     builder.Services.AddScoped<IProductsService, ProductsService>();
     builder.Services.AddScoped<IUsersService, UsersService>();
