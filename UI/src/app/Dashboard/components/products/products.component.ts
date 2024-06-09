@@ -22,7 +22,11 @@ export class ProductsComponent implements OnInit {
   products$ = this.productsService.products$;
 
   ngOnInit() {
-    this.productsService.getProducts().subscribe((value) => console.log(value));
+    this.productsService.getProducts().subscribe();
+  }
+
+  refreshProducts(page: number) {
+    this.productsService.getProducts(page).subscribe();
   }
 
   protected readonly formatDate = formatDate;

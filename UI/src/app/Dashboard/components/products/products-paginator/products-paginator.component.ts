@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'products-paginator',
@@ -9,4 +9,19 @@ import { Component, Input } from '@angular/core';
 export class ProductsPaginatorComponent {
   @Input() totalPages: number | null = null;
   currentPage = 1;
+  @Output() onPageChange = new EventEmitter<number>();
+
+  next() {
+    if (this.currentPage !== this.totalPages) {
+      this.currentPage++;
+      this.onPageChange.emit(this.currentPage);
+    }
+  }
+
+  prev() {
+    if (this.currentPage !== 1) {
+      this.currentPage--;
+      this.onPageChange.emit(this.currentPage);
+    }
+  }
 }

@@ -1,7 +1,7 @@
 <div>
   @if (products$ | async; as paginatedProducts) {
     <products-table [paginatedProducts]="paginatedProducts" />
-    <products-paginator [totalPages]="paginatedProducts.total" />
+    <products-paginator [totalPages]="paginatedProducts.total" (onPageChange)="refreshProducts($event)" />
   }
 
 </div>
