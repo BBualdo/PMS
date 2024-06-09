@@ -16,7 +16,8 @@ public class ProductsController(IProductsService productsService) : ControllerBa
     [Authorize]
     public async Task<ActionResult<PaginatedProducts>> GetProducts(int page = 1, int pageSize = 5)
     {
-        return await _productsService.GetProductsAsync(page, pageSize);
+        var products = await _productsService.GetProductsAsync(page, pageSize);
+        return Ok(products);
     }
 
     [HttpPost]

@@ -28,7 +28,7 @@ public class UsersService(UserManager<User> userManager) : IUsersService
         return await _userManager.FindByIdAsync(id);
     }
 
-    public async Task AddUserAsync(RegisterModel model)
+    public async Task<bool> AddUserAsync(RegisterModel model)
     {
         var user = new User
         {
@@ -38,25 +38,28 @@ public class UsersService(UserManager<User> userManager) : IUsersService
             UserName = model.Email
         };
 
-        await _userManager.CreateAsync(user, model.Password);
-    }
+        var result = await _userManager.CreateAsync(user, model.Password);
 
-    public async Task UpdateUserAsync(UpdateUserModel model)
-    {
-        var user = new User
-        {
-            FirstName = model.FirstName,
-            LastName = model.FirstName,
-            Email = model.Email,
-            UserName = model.Email
-        };
-
-        await _userManager.UpdateAsync(user);
+        return result.Succeeded;
     }
 
     public async Task DeleteUserAsync(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
         await _userManager.DeleteAsync(user);
+    }
+
+    public async Task<bool> UpdateUserAsync(string id, UpdateUserModel model)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null) return false;
+
+        user.FirstName = model.FirstName;
+        user.LastName = model.LastName;
+        user.Email = model.Email;
+
+        var result = await _userManager.UpdateAsync(user);
+
+        return result.Succeeded;
     }
 }
