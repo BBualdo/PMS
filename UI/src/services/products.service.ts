@@ -53,6 +53,14 @@ export class ProductsService {
     );
   }
 
+  updateProduct(product: ProductReq) {
+    this.loadingService.startLoading();
+    return this.http.put(url + 'Products', product).pipe(
+      catchError((error) => of(this.handleErrors(error))),
+      finalize(() => this.loadingService.stopLoading()),
+    );
+  }
+
   deleteProduct(id: number) {
     this.loadingService.startLoading();
     return this.http.delete(url + 'Products/' + id).pipe(

@@ -9,7 +9,6 @@ import { Product } from '../../../../models/Product';
 import { Dialog } from '@angular/cdk/dialog';
 import { ConfirmDialogComponent } from '../shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { ManageProductDialogComponent } from '../shared/dialogs/manage-product-dialog/manage-product-dialog.component';
-import { ProductReq } from '../../../../models/ProductReq';
 
 @Component({
   selector: 'app-products',
@@ -52,7 +51,13 @@ export class ProductsComponent implements OnInit {
       data: { title: 'Update Product', product: product },
     });
 
-    dialogRef.closed.subscribe((result) => console.log(result));
+    dialogRef.closed.subscribe((result: any) => {
+      if (result) {
+        this.productsService
+          .updateProduct(result)
+          .subscribe(() => this.refreshProducts(this.currentPage));
+      }
+    });
   }
 
   deleteProduct(product: Product) {
