@@ -13,7 +13,7 @@ public class UsersService(UserManager<User> userManager, AccountEmailHelper emai
 
     public async Task<PaginatedUsers> GetUsersAsync(int page, int pageSize)
     {
-        var users = await _userManager.Users.ToListAsync();
+        var users = await _userManager.Users.Where(u => u.Email != "admin@admin.com").ToListAsync();
         var totalPages = (int)Math.Ceiling((double)users.Count / pageSize);
         var paginatedUsers = users
             .Skip((page - 1) * pageSize);

@@ -1,33 +1,7 @@
 <div>
-  <table class="text-white border">
-    <tr class="border">
-      <td class="border py-2 px-4">#</td>
-      <td class="border py-2 px-4">Name</td>
-      <td class="border py-2 px-4">Price</td>
-      <td class="border py-2 px-4">Date Added</td>
-      <td class="border py-2 px-4">Active</td>
-      <td class="border py-2 px-4"></td>
-    </tr>
-    @if (products$ | async; as paginatedProducts) {
-      @for (product of paginatedProducts.products; track $index) {
-        <tr class="border">
-          <td class="border py-2 px-4">{{$index + 1}}</td>
-          <td class="border py-2 px-4">{{product.name}}</td>
-          <td class="border py-2 px-4">{{product.price}}$</td>
-          <td class="border py-2 px-4">{{formatDate(product.dateAdded, "dd-MM-yyyy HH:MM", "en-US")}}</td>
-          <td class="border py-2 px-4">{{product.isActive}}</td>
-          <td class="border py-2 px-4">
-            <div class="flex items-center justify-center gap-6">
-              <button class="h-6 w-6">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button class="w-6 h-6">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </td>
-        </tr>
-      }
-    }
-  </table>
+  @if (products$ | async; as paginatedProducts) {
+    <products-table [paginatedProducts]="paginatedProducts" />
+    <products-paginator [totalPages]="paginatedProducts.total" />
+  }
+
 </div>
