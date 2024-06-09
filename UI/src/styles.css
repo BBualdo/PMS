@@ -43,7 +43,7 @@ body {
   }
 
   .input-error {
-    @apply bg-red-400;
+    @apply bg-red-400 placeholder-red-900;
   }
 
   .btn {

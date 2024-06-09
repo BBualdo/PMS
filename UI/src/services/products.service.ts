@@ -12,6 +12,7 @@ import {
 } from 'rxjs';
 import { url } from '../config/config';
 import { PaginatedProducts } from '../models/PaginatedProducts';
+import { ProductReq } from '../models/ProductReq';
 
 @Injectable({
   providedIn: 'root',
@@ -42,6 +43,14 @@ export class ProductsService {
         catchError((error) => of(this.handleErrors(error))),
         finalize(() => this.loadingService.stopLoading()),
       );
+  }
+
+  addProduct(product: ProductReq) {
+    this.loadingService.startLoading();
+    return this.http.post(url + 'Products', product).pipe(
+      catchError((error) => of(this.handleErrors(error))),
+      finalize(() => this.loadingService.stopLoading()),
+    );
   }
 
   deleteProduct(id: number) {

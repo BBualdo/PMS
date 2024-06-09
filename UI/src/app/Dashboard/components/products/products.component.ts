@@ -9,7 +9,7 @@ import { Product } from '../../../../models/Product';
 import { Dialog } from '@angular/cdk/dialog';
 import { ConfirmDialogComponent } from '../shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { ManageProductDialogComponent } from '../shared/dialogs/manage-product-dialog/manage-product-dialog.component';
-import { ScrollStrategyOptions } from '@angular/cdk/overlay';
+import { ProductReq } from '../../../../models/ProductReq';
 
 @Component({
   selector: 'app-products',
@@ -34,15 +34,25 @@ export class ProductsComponent implements OnInit {
   }
 
   addProduct() {
-    this.dialog.open(ManageProductDialogComponent, {
+    const dialogRef = this.dialog.open(ManageProductDialogComponent, {
       data: { title: 'Add Product' },
+    });
+
+    dialogRef.closed.subscribe((result: any) => {
+      if (result) {
+        this.productsService
+          .addProduct(result)
+          .subscribe(() => this.refreshProducts(this.currentPage));
+      }
     });
   }
 
   updateProduct(product: Product) {
-    this.dialog.open(ManageProductDialogComponent, {
+    const dialogRef = this.dialog.open(ManageProductDialogComponent, {
       data: { title: 'Update Product', product: product },
     });
+
+    dialogRef.closed.subscribe((result) => console.log(result));
   }
 
   deleteProduct(product: Product) {

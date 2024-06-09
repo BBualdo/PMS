@@ -1,1 +1,6 @@
-<p>users works!</p>
+@if ((currentUser$ | async)!.roles.includes("Admin")) {
+  <p>users works!</p>
+} @else {
+  <p>You don't have permission to see this page.</p>
+}
+

@@ -16,7 +16,7 @@
       </button>
     </div>
     <form
-      (ngSubmit)="addProduct()"
+      (ngSubmit)="generateProduct()"
       [formGroup]="productForm"
       class="flex w-full flex-col items-center gap-6"
     >
@@ -31,8 +31,27 @@
           class="input"
           autocomplete="off"
           formControlName="name"
+          [ngClass]="{
+            'input-error':
+              productForm.controls['name'].touched &&
+              productForm.controls['name'].errors,
+          }"
         />
-        <!-- -->
+        @if (
+          productForm.controls["name"].touched &&
+          productForm.controls["name"].errors
+        ) {
+            <div>
+              @if (productForm.controls["name"].errors!["required"]) {
+                <p class="text-sm text-red-600">Required field</p>
+              }
+              @if (productForm.controls["name"].errors!["minlength"]) {
+                <p class="text-sm text-red-600">
+                  Must be between 6 and 200 characters
+                </p>
+              }
+            </div>
+        }
       </div>
       <div class="form-field w-full">
         <label for="price">Price</label>
@@ -44,8 +63,27 @@
           placeholder="999.99"
           class="input"
           formControlName="price"
+          [ngClass]="{
+            'input-error':
+              productForm.controls['price'].touched &&
+              productForm.controls['price'].errors,
+          }"
         />
-        <!-- -->
+        @if (
+          productForm.controls["price"].touched &&
+          productForm.controls["price"].errors
+          ) {
+          <div>
+            @if (productForm.controls["price"].errors!["required"]) {
+              <p class="text-sm text-red-600">Required field</p>
+            }
+            @if (productForm.controls["price"].errors!["min"]) {
+              <p class="text-sm text-red-600">
+                Can't be less than 1$
+              </p>
+            }
+          </div>
+        }
       </div>
       <div class="flex items-center gap-2">
         <label for="isActive">Activate Product?</label>
@@ -57,7 +95,6 @@
           class="h-5 w-5"
           formControlName="isActive"
         />
-        <!-- -->
       </div>
       <div class="flex items-center gap-6">
         <button (click)="close()" type="button" class="btn secondary-btn">

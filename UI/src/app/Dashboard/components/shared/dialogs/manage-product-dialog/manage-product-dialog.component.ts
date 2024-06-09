@@ -8,11 +8,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
+import { NgClass } from '@angular/common';
+import { ProductReq } from '../../../../../../models/ProductReq';
 
 @Component({
   selector: 'app-manage-product-dialog',
   standalone: true,
-  imports: [MatIcon, FormsModule, ReactiveFormsModule],
+  imports: [MatIcon, FormsModule, ReactiveFormsModule, NgClass],
   templateUrl: './manage-product-dialog.component.html',
 })
 export class ManageProductDialogComponent {
@@ -40,7 +42,21 @@ export class ManageProductDialogComponent {
     this.dialogRef.close();
   }
 
-  addProduct() {
-    console.log(this.productForm.value);
+  generateProduct() {
+    this.productForm.markAllAsTouched();
+    if (this.productForm.valid) {
+      const formValues = this.productForm.value;
+      const product: ProductReq = {
+        name: formValues.name!,
+        price: formValues.price!,
+        isActive: formValues.isActive!,
+        dateAdded: new Date().toISOString(),
+      };
+      if (this.data.product) {
+        product.id = this.data.product.id;
+      }
+
+      this.dialogRef.close(product);
+    }
   }
 }
