@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ProductsService } from '../../../../services/products.service';
-import { AsyncPipe, formatDate } from '@angular/common';
+import { AsyncPipe, formatDate, NgClass } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { ProductsTableComponent } from './products-table/products-table.component';
 import { ProductsPaginatorComponent } from './products-paginator/products-paginator.component';
@@ -9,6 +9,8 @@ import { Product } from '../../../../models/Product';
 import { Dialog } from '@angular/cdk/dialog';
 import { ConfirmDialogComponent } from '../shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { ManageProductDialogComponent } from '../shared/dialogs/manage-product-dialog/manage-product-dialog.component';
+import { LoadingSpinnerComponent } from '../../../Shared/loading-spinner/loading-spinner.component';
+import { LoadingService } from '../../../../services/loading.service';
 
 @Component({
   selector: 'app-products',
@@ -18,14 +20,18 @@ import { ManageProductDialogComponent } from '../shared/dialogs/manage-product-d
     MatIcon,
     ProductsTableComponent,
     ProductsPaginatorComponent,
+    NgClass,
+    LoadingSpinnerComponent,
   ],
   templateUrl: './products.component.html',
 })
 export class ProductsComponent implements OnInit {
   private productsService = inject(ProductsService);
+  private loadingService = inject(LoadingService);
   private dialog = inject(Dialog);
 
   products$ = this.productsService.products$;
+  isLoading$ = this.loadingService.isLoading$;
   currentPage = 1;
 
   ngOnInit() {
