@@ -13,7 +13,8 @@ public class ProductsService(IRepository<Product> productsRepository) : IProduct
         var products = await _productsRepository.GetAsync();
         var totalPages = (int)Math.Ceiling((double)products.Count() / pageSize);
         var paginatedProducts = products
-            .Skip((page - 1) * pageSize);
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize);
 
         return new PaginatedProducts
         {
