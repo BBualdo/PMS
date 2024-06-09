@@ -1,4 +1,5 @@
-﻿using Data.Models;
+﻿using Data.DummyData;
+using Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,5 +20,7 @@ public class PmsDbContext(DbContextOptions options) : IdentityDbContext<User>(op
             .HasMaxLength(50);
         builder.Entity<User>().Property(u => u.LastName)
             .HasMaxLength(50);
+
+        builder.Entity<Product>().HasData(DummyGenerator.GetDummyProducts());
     }
 }
