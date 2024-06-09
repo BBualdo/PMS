@@ -8,6 +8,8 @@ import { PaginatedProducts } from '../../../../models/PaginatedProducts';
 import { Product } from '../../../../models/Product';
 import { Dialog } from '@angular/cdk/dialog';
 import { ConfirmDialogComponent } from '../shared/dialogs/confirm-dialog/confirm-dialog.component';
+import { ManageProductDialogComponent } from '../shared/dialogs/manage-product-dialog/manage-product-dialog.component';
+import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-products',
@@ -29,6 +31,18 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     this.productsService.getProducts().subscribe();
+  }
+
+  addProduct() {
+    this.dialog.open(ManageProductDialogComponent, {
+      data: { title: 'Add Product' },
+    });
+  }
+
+  updateProduct(product: Product) {
+    this.dialog.open(ManageProductDialogComponent, {
+      data: { title: 'Update Product', product: product },
+    });
   }
 
   deleteProduct(product: Product) {

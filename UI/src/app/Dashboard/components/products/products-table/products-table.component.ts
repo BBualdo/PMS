@@ -12,6 +12,7 @@ import { Product } from '../../../../../models/Product';
 })
 export class ProductsTableComponent {
   @Input() paginatedProducts: PaginatedProducts | null = null;
+  @Input() updateProduct: (product: Product) => void = () => {};
   @Input() deleteProduct: (product: Product) => void = () => {};
   protected readonly formatDate = formatDate;
 }
