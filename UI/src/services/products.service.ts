@@ -44,6 +44,14 @@ export class ProductsService {
       );
   }
 
+  deleteProduct(id: number) {
+    this.loadingService.startLoading();
+    return this.http.delete(url + 'Products/' + id).pipe(
+      catchError((error) => of(this.handleErrors(error))),
+      finalize(() => this.loadingService.stopLoading()),
+    );
+  }
+
   private handleErrors(error: HttpErrorResponse): any {
     switch (error.status) {
     }

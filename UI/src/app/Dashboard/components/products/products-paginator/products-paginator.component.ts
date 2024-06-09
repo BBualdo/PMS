@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class ProductsPaginatorComponent {
   @Input() totalPages: number | null = null;
-  currentPage = 1;
+  @Input() currentPage = 1;
   @Output() onPageChange = new EventEmitter<number>();
 
   next() {

@@ -1,4 +1,5 @@
-<table class="text-white border w-[1000px] min-h-[297px]">
+<table class="text-white border w-[1000px]">
+  <tbody>
   <tr class="border bg-dark-slate-gray border-dark-slate-gray">
     <td class="table-td w-1/2">Name</td>
     <td class="table-td w-[140px]">Price</td>
@@ -6,30 +7,32 @@
     <td class="table-td">Active</td>
     <td class="table-td"></td>
   </tr>
-  @if (paginatedProducts) {
-    @for (product of paginatedProducts.products; track $index) {
-      <tr class="border">
-        <td class="table-td text-xl">{{product.name}}</td>
-        <td class="table-td text-xl">{{product.price}}$</td>
-        <td class="table-td text-xl">{{formatDate(product.dateAdded, "dd-MM-yyyy", "en-US")}}</td>
-        <td class="flex h-[50px] items-center justify-center">
-        @if (product.isActive) {
-          <mat-icon class="text-green-400">check_circle</mat-icon>
-        } @else {
-          <mat-icon class="text-orange-400">cancel</mat-icon>
-        }
-        </td>
-        <td class="border py-2 px-4">
-          <div class="flex items-center justify-center gap-6">
-            <button class="h-8 w-8 flex text-royal-blue rounded-lg items-center justify-center border-royal-blue hover:bg-royal-blue-hover transition-all duration-200 hover:text-white border">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button class="h-8 w-8 text-red-600 hover:bg-red-600/50 hover:text-white transition-all duration-200 flex rounded-lg items-center justify-center border-red-600 border">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-        </td>
-      </tr>
+    @if (paginatedProducts) {
+      @for (product of paginatedProducts.products; track $index) {
+        <tr class="border">
+          <td class="table-td text-xl">{{product.name}}</td>
+          <td class="table-td text-xl">{{product.price}}$</td>
+          <td class="table-td text-xl">{{formatDate(product.dateAdded, "dd-MM-yyyy", "en-US")}}</td>
+          <td class="flex h-[50px] items-center justify-center">
+            @if (product.isActive) {
+              <mat-icon class="text-green-400">check_circle</mat-icon>
+            } @else {
+              <mat-icon class="text-orange-400">cancel</mat-icon>
+            }
+          </td>
+          <td class="border py-2 px-4">
+            <div class="flex items-center justify-center gap-6">
+              <button class="h-8 w-8 flex text-royal-blue rounded-lg items-center justify-center border-royal-blue hover:bg-royal-blue-hover transition-all duration-200 hover:text-white border">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button (click)="deleteProduct(product.id)" class="h-8 w-8 text-red-600 hover:bg-red-600/50 hover:text-white transition-all duration-200 flex rounded-lg items-center justify-center border-red-600 border">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+      }
     }
-  }
+  </tbody>
+
 </table>

@@ -1,7 +1,11 @@
 <div class="flex flex-col gap-6">
-  <h2 class="text-4xl uppercase font-bold text-center">Products</h2>
+  <h2 class="text-center text-4xl font-bold uppercase">Products</h2>
   @if (products$ | async; as paginatedProducts) {
-      <products-table [paginatedProducts]="paginatedProducts" />
-      <products-paginator [totalPages]="paginatedProducts.total" (onPageChange)="refreshProducts($event)" />
+    <products-table [paginatedProducts]="paginatedProducts" [deleteProduct]="deleteProduct.bind(this)" />
+    <products-paginator
+      [totalPages]="paginatedProducts.total"
+      [currentPage]="currentPage"
+      (onPageChange)="refreshProducts($event); setCurrentPage($event)"
+    />
   }
 </div>

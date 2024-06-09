@@ -11,5 +11,6 @@ import { PaginatedProducts } from '../../../../../models/PaginatedProducts';
 })
 export class ProductsTableComponent {
   @Input() paginatedProducts: PaginatedProducts | null = null;
+  @Input() deleteProduct: (id: number) => void = () => {};
   protected readonly formatDate = formatDate;
 }
