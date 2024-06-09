@@ -5,6 +5,9 @@ import { MatIcon } from '@angular/material/icon';
 import { ProductsTableComponent } from './products-table/products-table.component';
 import { ProductsPaginatorComponent } from './products-paginator/products-paginator.component';
 import { PaginatedProducts } from '../../../../models/PaginatedProducts';
+import { Product } from '../../../../models/Product';
+import { Dialog } from '@angular/cdk/dialog';
+import { ConfirmDialogComponent } from '../shared/dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-products',
@@ -19,6 +22,7 @@ import { PaginatedProducts } from '../../../../models/PaginatedProducts';
 })
 export class ProductsComponent implements OnInit {
   private productsService = inject(ProductsService);
+  private dialog = inject(Dialog);
 
   products$ = this.productsService.products$;
   currentPage = 1;
@@ -27,10 +31,17 @@ export class ProductsComponent implements OnInit {
     this.productsService.getProducts().subscribe();
   }
 
-  deleteProduct(id: number) {
-    this.productsService
-      .deleteProduct(id)
-      .subscribe(() => this.refreshProducts(this.currentPage));
+  deleteProduct(product: Product) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: { name: product.name },
+    });
+    dialogRef.closed.subscribe((result) => {
+      if (result == true) {
+        this.productsService
+          .deleteProduct(product.id)
+          .subscribe(() => this.refreshProducts(this.currentPage));
+      }
+    });
   }
 
   refreshProducts(page: number) {
