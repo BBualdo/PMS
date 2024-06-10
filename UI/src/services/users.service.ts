@@ -58,7 +58,7 @@ export class UsersService {
 
   deleteUser(id: string) {
     this.loadingService.startLoading();
-    return this.http.delete(url + 'Users/' + id).pipe(
+    return this.http.delete(url + `Users/?id=${id}`).pipe(
       catchError((error) => of(this.handleErrors(error))),
       finalize(() => this.loadingService.stopLoading()),
     );
