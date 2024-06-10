@@ -261,4 +261,24 @@ public static class DummyGenerator
             }
         };
     }
+
+    public static List<User> GetDummyUsers()
+    {
+        var users = new List<User>();
+
+        for (int i = 1; i <= 10; i++)
+        {
+            var user = new User()
+            {
+                FirstName = $"User {i}",
+                LastName = "Seeded",
+                Email = $"test{i}@test.com",
+                UserName = $"test{i}@test.com",
+            };
+
+            users.Add(user);
+        }
+
+        return users;
+    }
 }

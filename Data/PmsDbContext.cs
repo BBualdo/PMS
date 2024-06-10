@@ -22,5 +22,6 @@ public class PmsDbContext(DbContextOptions options) : IdentityDbContext<User>(op
             .HasMaxLength(50);
 
         builder.Entity<Product>().HasData(DummyGenerator.GetDummyProducts());
+        builder.Entity<User>().HasData(DummyGenerator.GetDummyUsers());
     }
 }
