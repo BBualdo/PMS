@@ -31,7 +31,7 @@ public class UsersService(UserManager<User> userManager, AccountEmailHelper emai
         return await _userManager.FindByIdAsync(id);
     }
 
-    public async Task<bool> AddUserAsync(RegisterModel model)
+    public async Task<bool> AddUserAsync(UserCreateModel model)
     {
         var user = new User
         {
@@ -41,7 +41,7 @@ public class UsersService(UserManager<User> userManager, AccountEmailHelper emai
             UserName = model.Email
         };
 
-        var result = await _userManager.CreateAsync(user, model.Password);
+        var result = await _userManager.CreateAsync(user, "Test123!");
 
         if (result.Succeeded)
             await _emailHelper.SendConfirmationEmailAsync(user);
@@ -55,9 +55,9 @@ public class UsersService(UserManager<User> userManager, AccountEmailHelper emai
         await _userManager.DeleteAsync(user);
     }
 
-    public async Task<bool> UpdateUserAsync(string id, UpdateUserModel model)
+    public async Task<bool> UpdateUserAsync(UpdateUserModel model)
     {
-        var user = await _userManager.FindByIdAsync(id);
+        var user = await _userManager.FindByIdAsync(model.Id);
         if (user == null)
             return false;
 

@@ -13,6 +13,9 @@ import {
 import { PaginatedUsers } from '../models/PaginatedUsers';
 import { url } from '../config/config';
 import { UserReq } from '../models/UserReq';
+import { Dialog } from '@angular/cdk/dialog';
+import { ErrorDialogComponent } from '../app/Shared/error-dialog/error-dialog.component';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +30,8 @@ export class UsersService {
     private http: HttpClient,
     private errorsService: ErrorsService,
     private loadingService: LoadingService,
+    private dialog: Dialog,
+    private router: Router,
   ) {}
 
   getUsers(page: number = 1, pageSize: number = 5): Observable<PaginatedUsers> {
@@ -66,7 +71,17 @@ export class UsersService {
 
   private handleErrors(error: HttpErrorResponse): any {
     switch (error.status) {
+      case 400: {
+        if (error.error) {
+          error.error.forEach((err: { code: string; description: string }) =>
+            this.errorsService.add(err.description),
+          );
+        }
+        break;
+      }
     }
+
+    this.dialog.open(ErrorDialogComponent);
 
     console.log(error);
   }

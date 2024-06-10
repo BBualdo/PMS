@@ -11,6 +11,7 @@ import { ConfirmDialogComponent } from '../shared/dialogs/confirm-dialog/confirm
 import { ManageUserDialogComponent } from '../shared/dialogs/manage-user-dialog/manage-user-dialog.component';
 import { UserInfo } from '../../../../models/UserInfo';
 import { PaginatedUsers } from '../../../../models/PaginatedUsers';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-users',
@@ -26,16 +27,22 @@ import { PaginatedUsers } from '../../../../models/PaginatedUsers';
   templateUrl: './users.component.html',
 })
 export class UsersComponent implements OnInit {
+  private authService = inject(AuthService);
   private usersService = inject(UsersService);
   private loadingService = inject(LoadingService);
   private dialog = inject(Dialog);
 
+  currentUser$ = this.authService.currentUser$;
   users$ = this.usersService.users$;
   isLoading$ = this.loadingService.isLoading$;
   currentPage = 1;
 
   ngOnInit() {
-    this.usersService.getUsers().subscribe();
+    this.currentUser$.subscribe((currentUser) => {
+      if (currentUser!.roles.includes('Admin')) {
+        this.usersService.getUsers().subscribe();
+      }
+    });
   }
 
   addUser() {

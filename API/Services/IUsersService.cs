@@ -7,7 +7,7 @@ public interface IUsersService
 {
     Task<PaginatedUsers> GetUsersAsync(int page, int pageSize);
     Task<User> GetUserByIdAsync(string id);
-    Task<bool> AddUserAsync(RegisterModel model);
-    Task<bool> UpdateUserAsync(string id, UpdateUserModel model);
+    Task<bool> AddUserAsync(UserCreateModel model);
+    Task<bool> UpdateUserAsync(UpdateUserModel model);
     Task DeleteUserAsync(string id);
 }

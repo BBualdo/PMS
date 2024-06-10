@@ -22,7 +22,7 @@ public class UsersController(IUsersService usersService) : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult> AddUser(RegisterModel model)
+    public async Task<ActionResult> AddUser(UserCreateModel model)
     {
         var isSuccessful = await _usersService.AddUserAsync(model);
         if (!isSuccessful)
@@ -33,9 +33,9 @@ public class UsersController(IUsersService usersService) : ControllerBase
 
     [HttpPut]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult> UpdateUser(string id, UpdateUserModel model)
+    public async Task<ActionResult> UpdateUser( UpdateUserModel model)
     {
-        var isSuccessful = await _usersService.UpdateUserAsync(id, model);
+        var isSuccessful = await _usersService.UpdateUserAsync(model);
         if (!isSuccessful)
             return BadRequest(new[] { new { code = "UpdateFailed", description = "User update failed." } });
         return NoContent();
