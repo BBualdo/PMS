@@ -24,7 +24,7 @@
           Add Product
         </button>
         @if (paginatedProducts.total > 0) {
-          <products-paginator
+          <paginator
             [totalPages]="paginatedProducts.total"
             [currentPage]="currentPage"
             (onPageChange)="refreshProducts($event); setCurrentPage($event)"

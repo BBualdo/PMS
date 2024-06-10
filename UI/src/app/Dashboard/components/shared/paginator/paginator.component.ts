@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'products-paginator',
+  selector: 'paginator',
   standalone: true,
   imports: [],
-  templateUrl: './products-paginator.component.html',
+  templateUrl: './paginator.component.html',
 })
-export class ProductsPaginatorComponent {
+export class PaginatorComponent {
   @Input() totalPages: number | null = null;
   @Input() currentPage = 1;
   @Output() onPageChange = new EventEmitter<number>();

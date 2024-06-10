@@ -3,7 +3,7 @@ import { ProductsService } from '../../../../services/products.service';
 import { AsyncPipe, formatDate, NgClass } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { ProductsTableComponent } from './products-table/products-table.component';
-import { ProductsPaginatorComponent } from './products-paginator/products-paginator.component';
+import { PaginatorComponent } from '../shared/paginator/paginator.component';
 import { PaginatedProducts } from '../../../../models/PaginatedProducts';
 import { Product } from '../../../../models/Product';
 import { Dialog } from '@angular/cdk/dialog';
@@ -19,7 +19,7 @@ import { LoadingService } from '../../../../services/loading.service';
     AsyncPipe,
     MatIcon,
     ProductsTableComponent,
-    ProductsPaginatorComponent,
+    PaginatorComponent,
     NgClass,
     LoadingSpinnerComponent,
   ],
