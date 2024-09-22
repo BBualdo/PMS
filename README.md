@@ -1,4 +1,4 @@
-# Product Management Systen
+# Product Management System
 
 <p>Application where users can view, create, update and delete products of their choice. Users can sign in, create account, confirm email to be able to sign in and reset their password. Furthermore, there is one admin account with Admin role, which lets him create, update and delete other users.</p>
 
